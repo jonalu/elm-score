@@ -1,6 +1,11 @@
-module Model exposing (Schedule, Match, Team)
+module Model exposing (..)
 
 import Date exposing (Date)
+
+
+type alias Model =
+    { schedule : Schedule
+    }
 
 
 type alias Schedule =

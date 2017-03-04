@@ -1,26 +1,26 @@
 module Main exposing (..)
 
 import Html exposing (program)
-import Model exposing (Schedule, Match, Team)
+import Model exposing (Model, Schedule)
 import Update exposing (update)
 import View exposing (view)
 import Messages exposing (Msg(..))
 import Service exposing (getSchedule)
 
 
-init : ( Schedule, Cmd Msg )
+init : ( Model, Cmd Msg )
 init =
-    ( Schedule []
+    ( Model <| Schedule []
     , getSchedule
     )
 
 
-subscriptions : Schedule -> Sub Msg
+subscriptions : Model -> Sub Msg
 subscriptions schedule =
     Sub.none
 
 
-main : Program Never Schedule Msg
+main : Program Never Model Msg
 main =
     program
         { init = init

@@ -1,8 +1,8 @@
 module Service exposing (getSchedule)
 
 import Http
-import Decoders exposing (schedule, match, team)
-import Messages exposing (Msg(..))
+import Decoders exposing (schedule)
+import Messages exposing (Msg(ReceiveSchedule))
 import Urls
 
 

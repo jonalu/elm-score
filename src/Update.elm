@@ -1,14 +1,14 @@
 module Update exposing (update)
 
-import Model exposing (Schedule)
+import Model exposing (Model)
 import Messages exposing (Msg(..))
 
 
-update : Msg -> Schedule -> ( Schedule, Cmd Msg )
-update action schedule =
+update : Msg -> Model -> ( Model, Cmd Msg )
+update action model =
     case action of
         ReceiveSchedule (Ok data) ->
-            ( data, Cmd.none )
+            ( { model | schedule = data }, Cmd.none )
 
         ReceiveSchedule (Err _) ->
-            ( schedule, Cmd.none )
+            ( model, Cmd.none )
