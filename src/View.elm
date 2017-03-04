@@ -1,15 +1,22 @@
 module View exposing (view)
 
-import Html exposing (Html, ul, li, text, span)
+import Html exposing (Html, section, div, text, span)
 import Html.Attributes exposing (class)
 import Model exposing (Schedule, Match, Team)
+import Date exposing (Date, hour, minute)
+import Date.Format exposing (format)
+
+
+startTimeView : Date -> Html action
+startTimeView startTime =
+    span [ class "start-time" ] [ text <| format "%d.%m %H:%M" startTime ++ " " ]
 
 
 scoreView : Match -> Html action
 scoreView match =
     let
         score =
-            toString match.homeTeam.goals ++ " - " ++ toString match.homeTeam.goals
+            "  " ++ toString match.homeTeam.goals ++ " - " ++ toString match.homeTeam.goals ++ "  "
     in
         span [ class "team-score" ] [ text score ]
 
@@ -21,8 +28,9 @@ teamNameView team =
 
 matchView : Match -> Html action
 matchView match =
-    li [ class "match" ]
-        [ teamNameView match.homeTeam
+    div [ class "match" ]
+        [ startTimeView match.startTime
+        , teamNameView match.homeTeam
         , scoreView match
         , teamNameView match.awayTeam
         ]
@@ -32,4 +40,4 @@ view : Schedule -> Html action
 view schedule =
     schedule.matches
         |> List.map (\match -> matchView match)
-        |> ul [ class "match-schedule" ]
+        |> section [ class "match-schedule" ]
