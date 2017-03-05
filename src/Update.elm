@@ -12,3 +12,6 @@ update action model =
 
         ReceiveSchedule (Err _) ->
             ( model, Cmd.none )
+
+        MatchSelected match ->
+            ( { model | match = match }, Cmd.none )

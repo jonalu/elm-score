@@ -1,10 +1,12 @@
 module Model exposing (..)
 
 import Date exposing (Date)
+import Maybe exposing (Maybe)
 
 
 type alias Model =
     { schedule : Schedule
+    , match : Match
     }
 
 
@@ -16,7 +18,7 @@ type alias Schedule =
 type alias Match =
     { homeTeam : Team
     , awayTeam : Team
-    , startTime : Date
+    , startTime : Maybe Date
     }
 
 

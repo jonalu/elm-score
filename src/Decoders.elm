@@ -5,14 +5,14 @@ import Model exposing (Schedule, Match, Team)
 import Date exposing (Date, fromString)
 
 
-date : Decoder Date
+date : Decoder (Maybe Date)
 date =
     string
         |> andThen
             (\iso8601 ->
                 case (fromString iso8601) of
                     Ok date ->
-                        succeed date
+                        succeed (Just date)
 
                     Err error ->
                         fail error
