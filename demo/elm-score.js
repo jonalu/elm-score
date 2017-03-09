@@ -13530,10 +13530,10 @@ var _user$project$Messages$ReceiveSchedule = function (a) {
 var _user$project$Urls$match = function (id) {
 	return A2(
 		_elm_lang$core$Basics_ops['++'],
-		'http://rest.tv2.no/sports-dw-rest/sport/football/match/',
+		'https://rest.tv2.no/sports-dw-rest/sport/football/match/',
 		_elm_lang$core$Basics$toString(id));
 };
-var _user$project$Urls$premierLeagueCurrentRound = 'http://rest.tv2.no/sports-dw-rest/sport/schedule/tournament/230/season/338?currentRound=true';
+var _user$project$Urls$premierLeagueCurrentRound = 'https://rest.tv2.no/sports-dw-rest/sport/schedule/tournament/230/season/338?currentRound=true';
 
 var _user$project$Service$getMatch = function (id) {
 	return A2(
