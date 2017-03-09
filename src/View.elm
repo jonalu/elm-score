@@ -50,7 +50,7 @@ scheduleView schedule =
         |> section [ class "match-schedule" ]
 
 
-matchDetailsView : PendingState -> Maybe ScheduleMatch -> Html Msg
+matchDetailsView : PendingState -> Maybe Match -> Html Msg
 matchDetailsView pendingState match =
     let
         className =
@@ -67,7 +67,7 @@ matchDetailsView pendingState match =
 
             Just m ->
                 section [ class className ]
-                    [ h2 [] [ text "ScheduleMatch details" ]
+                    [ h2 [] [ text "Match details" ]
                     , matchView m
                     ]
 

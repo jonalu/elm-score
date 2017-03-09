@@ -11,7 +11,7 @@ type PendingState
 
 type alias Model =
     { schedule : Schedule
-    , match : Maybe ScheduleMatch
+    , match : Maybe Match
     , matchPending : PendingState
     }
 
@@ -22,6 +22,18 @@ type alias Schedule =
 
 
 type alias ScheduleMatch =
+    { id : Int
+    , homeTeam : Team
+    , awayTeam : Team
+    , startTime : Maybe Date
+    }
+
+
+
+-- TODO: Expand Match to show lineup in match details
+
+
+type alias Match =
     { id : Int
     , homeTeam : Team
     , awayTeam : Team
