@@ -14,4 +14,4 @@ update action model =
             ( model, Cmd.none )
 
         MatchSelected match ->
-            ( { model | match = match }, Cmd.none )
+            ( { model | match = Just match }, Cmd.none )

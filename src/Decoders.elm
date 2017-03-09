@@ -21,14 +21,16 @@ date =
 
 team : Decoder Team
 team =
-    map2 Team
+    map3 Team
+        (field "id" int)
         (field "name" string)
         (field "goals" int)
 
 
 match : Decoder Match
 match =
-    map3 Match
+    map4 Match
+        (field "id" int)
         (field "teamA" team)
         (field "teamB" team)
         (field "startTime" date)

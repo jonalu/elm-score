@@ -10,7 +10,7 @@ import Service exposing (getSchedule)
 
 init : ( Model, Cmd Msg )
 init =
-    ( Model (Schedule []) (Match (Team "A" 0) (Team "B" 0) Nothing)
+    ( Model (Schedule []) Nothing
     , getSchedule
     )
 

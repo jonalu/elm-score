@@ -6,7 +6,7 @@ import Maybe exposing (Maybe)
 
 type alias Model =
     { schedule : Schedule
-    , match : Match
+    , match : Maybe Match
     }
 
 
@@ -16,13 +16,22 @@ type alias Schedule =
 
 
 type alias Match =
-    { homeTeam : Team
+    { id : Int
+    , homeTeam : Team
     , awayTeam : Team
     , startTime : Maybe Date
     }
 
 
 type alias Team =
-    { name : String
+    { id : Int
+    , name : String
     , goals : Int
+    }
+
+
+type alias Player =
+    { id : Int
+    , firstName : String
+    , lastName : String
     }

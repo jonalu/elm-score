@@ -11,23 +11,19 @@ import Html.Events exposing (onClick)
 
 startTimeView : Maybe Date -> Html Msg
 startTimeView date =
-    let
-        str =
-            case date of
-                Nothing ->
-                    "N/A"
+    case date of
+        Nothing ->
+            text "N/A"
 
-                Just d ->
-                    format "%d.%m %H:%M" d
-    in
-        span [ class "start-time" ] [ text <| str ++ " " ]
+        Just d ->
+            span [ class "start-time" ] [ text <| format "%d.%m %H:%M" d ]
 
 
 scoreView : Match -> Html Msg
 scoreView match =
     let
         score =
-            "  " ++ toString match.homeTeam.goals ++ " - " ++ toString match.awayTeam.goals ++ "  "
+            toString match.homeTeam.goals ++ " - " ++ toString match.awayTeam.goals
     in
         span [ class "team-score" ] [ text score ]
 
@@ -54,12 +50,17 @@ scheduleView schedule =
         |> section [ class "match-schedule" ]
 
 
-matchDetailsView : Match -> Html Msg
+matchDetailsView : Maybe Match -> Html Msg
 matchDetailsView match =
-    section [ class "match-details" ]
-        [ h2 [] [ text "Match details" ]
-        , matchView match
-        ]
+    case match of
+        Nothing ->
+            text ""
+
+        Just m ->
+            section [ class "match-details" ]
+                [ h2 [] [ text "Match details" ]
+                , matchView m
+                ]
 
 
 view : Model -> Html Msg
