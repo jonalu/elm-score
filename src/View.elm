@@ -74,8 +74,8 @@ matchDetailsView pendingState match =
 
 view : Model -> Html Msg
 view model =
-    main_ [ class "live-score-page" ]
-        [ h1 [] [ text "Elm-livescore" ]
+    main_ [ class "elm-score-page" ]
+        [ h1 [] [ text "Elm-score" ]
         , scheduleView model.schedule
         , matchDetailsView model.matchPending model.match
         ]
