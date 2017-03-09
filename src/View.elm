@@ -50,17 +50,26 @@ scheduleView schedule =
         |> section [ class "match-schedule" ]
 
 
-matchDetailsView : Maybe Match -> Html Msg
-matchDetailsView match =
-    case match of
-        Nothing ->
-            text ""
+matchDetailsView : PendingState -> Maybe Match -> Html Msg
+matchDetailsView pendingState match =
+    let
+        className =
+            case pendingState of
+                Pending ->
+                    "match-details match-details--loading"
 
-        Just m ->
-            section [ class "match-details" ]
-                [ h2 [] [ text "Match details" ]
-                , matchView m
-                ]
+                NotPending ->
+                    "match-details"
+    in
+        case match of
+            Nothing ->
+                text ""
+
+            Just m ->
+                section [ class className ]
+                    [ h2 [] [ text "Match details" ]
+                    , matchView m
+                    ]
 
 
 view : Model -> Html Msg
@@ -68,5 +77,5 @@ view model =
     main_ [ class "live-score-page" ]
         [ h1 [] [ text "Elm-livescore" ]
         , scheduleView model.schedule
-        , matchDetailsView model.match
+        , matchDetailsView model.matchPending model.match
         ]

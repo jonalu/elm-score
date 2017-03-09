@@ -15,10 +15,10 @@ update action model =
             ( model, Cmd.none )
 
         ReceiveMatch (Ok data) ->
-            ( { model | match = Just data }, Cmd.none )
+            ( { model | match = Just data, matchPending = Model.NotPending }, Cmd.none )
 
         ReceiveMatch (Err _) ->
             ( model, Cmd.none )
 
         MatchSelected id ->
-            ( model, getMatch id )
+            ( { model | matchPending = Model.Pending }, getMatch id )

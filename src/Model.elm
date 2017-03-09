@@ -4,9 +4,15 @@ import Date exposing (Date)
 import Maybe exposing (Maybe)
 
 
+type PendingState
+    = Pending
+    | NotPending
+
+
 type alias Model =
     { schedule : Schedule
     , match : Maybe Match
+    , matchPending : PendingState
     }
 
 
