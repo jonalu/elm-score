@@ -1,7 +1,6 @@
 module Model exposing (..)
 
 import Date exposing (Date)
-import Maybe exposing (Maybe)
 
 
 type PendingState
@@ -11,8 +10,9 @@ type PendingState
 
 type alias Model =
     { schedule : Schedule
-    , match : Maybe Match
-    , matchPending : PendingState
+    , matchIdSelected : Maybe Int
+    , matchEvents : Maybe (List MatchEvent)
+    , matchEventsPending : PendingState
     }
 
 
@@ -33,4 +33,16 @@ type alias Team =
     { id : Int
     , name : String
     , goals : Int
+    }
+
+
+type alias Player =
+    { id : Int
+    , lastName : String
+    }
+
+
+type alias MatchEvent =
+    { player : Player
+    , icon : String
     }

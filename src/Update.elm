@@ -2,7 +2,7 @@ module Update exposing (update)
 
 import Model exposing (Model)
 import Messages exposing (Msg(..))
-import Service exposing (getMatch)
+import Service exposing (getMatchEvents)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -14,11 +14,11 @@ update action model =
         ReceiveSchedule (Err _) ->
             ( model, Cmd.none )
 
-        ReceiveMatch (Ok data) ->
-            ( { model | match = Just data, matchPending = Model.NotPending }, Cmd.none )
+        ReceiveMatchEvents (Ok data) ->
+            ( { model | matchEvents = Just data, matchEventsPending = Model.NotPending }, Cmd.none )
 
-        ReceiveMatch (Err _) ->
+        ReceiveMatchEvents (Err _) ->
             ( model, Cmd.none )
 
         MatchSelected id ->
-            ( { model | matchPending = Model.Pending }, getMatch id )
+            ( { model | matchEventsPending = Model.Pending, matchIdSelected = Just id }, getMatchEvents id )
