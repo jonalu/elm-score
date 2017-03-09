@@ -1,8 +1,8 @@
-module Service exposing (getSchedule, getMatch)
+module Service exposing (getSchedule, getScheduleMatch)
 
 import Http
 import Decoders exposing (schedule, match)
-import Messages exposing (Msg(ReceiveSchedule, ReceiveMatch))
+import Messages exposing (Msg(ReceiveSchedule, ReceiveScheduleMatch))
 import Urls
 
 
@@ -12,7 +12,7 @@ getSchedule =
         |> Http.send ReceiveSchedule
 
 
-getMatch : Int -> Cmd Msg
-getMatch id =
+getScheduleMatch : Int -> Cmd Msg
+getScheduleMatch id =
     Http.get (Urls.match id) match
-        |> Http.send ReceiveMatch
+        |> Http.send ReceiveScheduleMatch

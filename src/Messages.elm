@@ -1,10 +1,10 @@
 module Messages exposing (Msg(..))
 
 import Http
-import Model exposing (Schedule, Match)
+import Model exposing (Schedule, ScheduleMatch)
 
 
 type Msg
     = ReceiveSchedule (Result Http.Error Schedule)
-    | ReceiveMatch (Result Http.Error Match)
-    | MatchSelected Int
+    | ReceiveScheduleMatch (Result Http.Error ScheduleMatch)
+    | ScheduleMatchSelected Int

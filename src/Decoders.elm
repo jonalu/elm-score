@@ -1,7 +1,7 @@
 module Decoders exposing (..)
 
 import Json.Decode exposing (..)
-import Model exposing (Schedule, Match, Team)
+import Model exposing (Schedule, ScheduleMatch, Team)
 import Date exposing (Date, fromString)
 
 
@@ -27,9 +27,9 @@ team =
         (field "goals" int)
 
 
-match : Decoder Match
+match : Decoder ScheduleMatch
 match =
-    map4 Match
+    map4 ScheduleMatch
         (field "id" int)
         (field "teamA" team)
         (field "teamB" team)

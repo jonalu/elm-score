@@ -19,7 +19,7 @@ startTimeView date =
             span [ class "start-time" ] [ text <| format "%d.%m %H:%M" d ]
 
 
-scoreView : Match -> Html Msg
+scoreView : ScheduleMatch -> Html Msg
 scoreView match =
     let
         score =
@@ -33,9 +33,9 @@ teamNameView team =
     span [ class "team-name" ] [ text team.name ]
 
 
-matchView : Match -> Html Msg
+matchView : ScheduleMatch -> Html Msg
 matchView match =
-    div [ class "match", onClick (MatchSelected match.id) ]
+    div [ class "match", onClick (ScheduleMatchSelected match.id) ]
         [ startTimeView match.startTime
         , teamNameView match.homeTeam
         , scoreView match
@@ -50,7 +50,7 @@ scheduleView schedule =
         |> section [ class "match-schedule" ]
 
 
-matchDetailsView : PendingState -> Maybe Match -> Html Msg
+matchDetailsView : PendingState -> Maybe ScheduleMatch -> Html Msg
 matchDetailsView pendingState match =
     let
         className =
@@ -67,7 +67,7 @@ matchDetailsView pendingState match =
 
             Just m ->
                 section [ class className ]
-                    [ h2 [] [ text "Match details" ]
+                    [ h2 [] [ text "ScheduleMatch details" ]
                     , matchView m
                     ]
 

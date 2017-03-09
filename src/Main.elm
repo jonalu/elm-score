@@ -1,7 +1,7 @@
 module Main exposing (..)
 
 import Html exposing (program)
-import Model exposing (Model, Schedule, Match, Team)
+import Model exposing (Model, Schedule)
 import Update exposing (update)
 import View exposing (view)
 import Messages exposing (Msg(..))

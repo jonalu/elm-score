@@ -11,17 +11,17 @@ type PendingState
 
 type alias Model =
     { schedule : Schedule
-    , match : Maybe Match
+    , match : Maybe ScheduleMatch
     , matchPending : PendingState
     }
 
 
 type alias Schedule =
-    { matches : List Match
+    { matches : List ScheduleMatch
     }
 
 
-type alias Match =
+type alias ScheduleMatch =
     { id : Int
     , homeTeam : Team
     , awayTeam : Team
