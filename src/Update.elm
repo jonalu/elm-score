@@ -20,5 +20,5 @@ update action model =
         ReceiveMatch (Err _) ->
             ( model, Cmd.none )
 
-        ScheduleMatchSelected id ->
+        MatchSelected id ->
             ( { model | matchPending = Model.Pending }, getMatch id )

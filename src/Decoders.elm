@@ -1,7 +1,7 @@
 module Decoders exposing (..)
 
 import Json.Decode exposing (..)
-import Model exposing (Schedule, ScheduleMatch, Match, Team)
+import Model exposing (Schedule, Match, Team)
 import Date exposing (Date, fromString)
 
 

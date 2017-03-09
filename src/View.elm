@@ -19,7 +19,7 @@ startTimeView date =
             span [ class "start-time" ] [ text <| format "%d.%m %H:%M" d ]
 
 
-scoreView : ScheduleMatch -> Html Msg
+scoreView : Match -> Html Msg
 scoreView match =
     let
         score =
@@ -33,9 +33,9 @@ teamNameView team =
     span [ class "team-name" ] [ text team.name ]
 
 
-matchView : ScheduleMatch -> Html Msg
+matchView : Match -> Html Msg
 matchView match =
-    div [ class "match", onClick (ScheduleMatchSelected match.id) ]
+    div [ class "match", onClick (MatchSelected match.id) ]
         [ startTimeView match.startTime
         , teamNameView match.homeTeam
         , scoreView match
