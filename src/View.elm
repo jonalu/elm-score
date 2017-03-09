@@ -35,7 +35,7 @@ teamNameView team =
 
 matchView : Match -> Html Msg
 matchView match =
-    div [ class "match", onClick (MatchSelected match) ]
+    div [ class "match", onClick (MatchSelected match.id) ]
         [ startTimeView match.startTime
         , teamNameView match.homeTeam
         , scoreView match

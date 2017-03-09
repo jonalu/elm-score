@@ -2,6 +2,7 @@ module Update exposing (update)
 
 import Model exposing (Model)
 import Messages exposing (Msg(..))
+import Service exposing (getMatch)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -13,5 +14,11 @@ update action model =
         ReceiveSchedule (Err _) ->
             ( model, Cmd.none )
 
-        MatchSelected match ->
-            ( { model | match = Just match }, Cmd.none )
+        ReceiveMatch (Ok data) ->
+            ( { model | match = Just data }, Cmd.none )
+
+        ReceiveMatch (Err _) ->
+            ( model, Cmd.none )
+
+        MatchSelected id ->
+            ( model, getMatch id )
