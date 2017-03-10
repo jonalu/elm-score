@@ -13564,7 +13564,7 @@ var _user$project$Urls$match = function (id) {
 		'https://rest.tv2.no/sports-dw-rest/sport/football/match/',
 		_elm_lang$core$Basics$toString(id));
 };
-var _user$project$Urls$premierLeagueCurrentRound = 'http://rest.tv2.no/sports-dw-rest/sport/schedule?fromDate=2017-03-09T00%3A00%3A00%2B01%3A00&toDate=2017-03-10T00%3A00%3A00%2B01%3A00&sportId=1&pageNo=1';
+var _user$project$Urls$premierLeagueCurrentRound = 'https://rest.tv2.no/sports-dw-rest/sport/schedule/tournament/230/season/338?currentRound=true';
 
 var _user$project$Service$getMatchEvents = function (id) {
 	return A2(
