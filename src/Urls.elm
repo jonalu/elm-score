@@ -19,4 +19,4 @@ match id =
 
 matchEvents : Int -> String
 matchEvents id =
-    "http://rest.tv2.no/sports-dw-rest/sport/event?matchId=" ++ toString id ++ "&eventTypeId=19,3,2,1,15"
+    "https://rest.tv2.no/sports-dw-rest/sport/event?matchId=" ++ toString id ++ "&eventTypeId=19,3,2,1,15"

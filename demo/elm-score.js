@@ -13552,7 +13552,7 @@ var _user$project$Messages$ReceiveSchedule = function (a) {
 var _user$project$Urls$matchEvents = function (id) {
 	return A2(
 		_elm_lang$core$Basics_ops['++'],
-		'http://rest.tv2.no/sports-dw-rest/sport/event?matchId=',
+		'https://rest.tv2.no/sports-dw-rest/sport/event?matchId=',
 		A2(
 			_elm_lang$core$Basics_ops['++'],
 			_elm_lang$core$Basics$toString(id),
