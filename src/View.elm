@@ -1,7 +1,7 @@
 module View exposing (view)
 
-import Html exposing (Html, main_, h1, h2, section, div, text, span)
-import Html.Attributes exposing (class)
+import Html exposing (Html, main_, h1, h2, section, div, text, span, img)
+import Html.Attributes exposing (class, src)
 import Model exposing (..)
 import Date exposing (Date, hour, minute)
 import Date.Format exposing (format)
@@ -19,7 +19,7 @@ startTimeView date =
             span [ class "start-time" ] [ text <| format "%d.%m %H:%M" d ]
 
 
-scoreView : ScheduleMatch -> Html Msg
+scoreView : Match -> Html Msg
 scoreView match =
     let
         score =
@@ -33,49 +33,72 @@ teamNameView team =
     span [ class "team-name" ] [ text team.name ]
 
 
-matchView : ScheduleMatch -> Html Msg
-matchView match =
-    div [ class "match", onClick (ScheduleMatchSelected match.id) ]
-        [ startTimeView match.startTime
-        , teamNameView match.homeTeam
-        , scoreView match
-        , teamNameView match.awayTeam
-        ]
+matchView : Match -> Model -> Html Msg
+matchView match model =
+    let
+        isActiveMatch =
+            case model.matchIdSelected of
+                Just id ->
+                    id == match.id
+
+                _ ->
+                    False
+
+        events =
+            case isActiveMatch of
+                True ->
+                    matchEventsView model.matchEventsPending model.matchEvents
+
+                False ->
+                    text ""
+    in
+        div [ class "match", onClick (MatchSelected match.id) ]
+            [ div [ class "match-header" ]
+                [ startTimeView match.startTime
+                , teamNameView match.homeTeam
+                , scoreView match
+                , teamNameView match.awayTeam
+                ]
+            , events
+            ]
 
 
-scheduleView : Schedule -> Html Msg
-scheduleView schedule =
-    schedule.matches
-        |> List.map (\match -> matchView match)
+scheduleView : Model -> Html Msg
+scheduleView model =
+    model.schedule.matches
+        |> List.map (\match -> matchView match model)
         |> section [ class "match-schedule" ]
 
 
-matchDetailsView : PendingState -> Maybe Match -> Html Msg
-matchDetailsView pendingState match =
+matchEventsView : PendingState -> Maybe (List MatchEvent) -> Html Msg
+matchEventsView pendingState maybeList =
     let
         className =
             case pendingState of
                 Pending ->
-                    "match-details match-details--loading"
+                    "match-events match-events--loading"
 
                 NotPending ->
-                    "match-details"
+                    "match-events"
     in
-        case match of
+        case maybeList of
             Nothing ->
                 text ""
 
-            Just m ->
-                section [ class className ]
-                    [ h2 [] [ text "Match details" ]
-                    , matchView m
-                    ]
+            Just events ->
+                events
+                    |> List.map (\matchEvent -> matchEventView matchEvent)
+                    |> section [ class className ]
+
+
+matchEventView : MatchEvent -> Html Msg
+matchEventView matchEvent =
+    div [ class "match-event" ] [ img [ src matchEvent.icon, class "match-event-icon" ] [], text matchEvent.player.lastName ]
 
 
 view : Model -> Html Msg
 view model =
     main_ [ class "elm-score-page" ]
         [ h1 [] [ text "Elm-score" ]
-        , scheduleView model.schedule
-        , matchDetailsView model.matchPending model.match
+        , scheduleView model
         ]

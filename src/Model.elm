@@ -1,7 +1,6 @@
 module Model exposing (..)
 
 import Date exposing (Date)
-import Maybe exposing (Maybe)
 
 
 type PendingState
@@ -11,26 +10,15 @@ type PendingState
 
 type alias Model =
     { schedule : Schedule
-    , match : Maybe Match
-    , matchPending : PendingState
+    , matchIdSelected : Maybe Int
+    , matchEvents : Maybe (List MatchEvent)
+    , matchEventsPending : PendingState
     }
 
 
 type alias Schedule =
-    { matches : List ScheduleMatch
+    { matches : List Match
     }
-
-
-type alias ScheduleMatch =
-    { id : Int
-    , homeTeam : Team
-    , awayTeam : Team
-    , startTime : Maybe Date
-    }
-
-
-
--- TODO: Expand Match to show lineup in match details
 
 
 type alias Match =
@@ -50,6 +38,11 @@ type alias Team =
 
 type alias Player =
     { id : Int
-    , firstName : String
     , lastName : String
+    }
+
+
+type alias MatchEvent =
+    { player : Player
+    , icon : String
     }

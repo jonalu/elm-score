@@ -13458,17 +13458,13 @@ var _mgold$elm_date_format$Date_Format$format = F2(
 	});
 var _mgold$elm_date_format$Date_Format$formatISO8601 = _mgold$elm_date_format$Date_Format$format('%Y-%m-%dT%H:%M:%SZ');
 
-var _user$project$Model$Model = F3(
-	function (a, b, c) {
-		return {schedule: a, match: b, matchPending: c};
+var _user$project$Model$Model = F4(
+	function (a, b, c, d) {
+		return {schedule: a, matchIdSelected: b, matchEvents: c, matchEventsPending: d};
 	});
 var _user$project$Model$Schedule = function (a) {
 	return {matches: a};
 };
-var _user$project$Model$ScheduleMatch = F4(
-	function (a, b, c, d) {
-		return {id: a, homeTeam: b, awayTeam: c, startTime: d};
-	});
 var _user$project$Model$Match = F4(
 	function (a, b, c, d) {
 		return {id: a, homeTeam: b, awayTeam: c, startTime: d};
@@ -13477,13 +13473,39 @@ var _user$project$Model$Team = F3(
 	function (a, b, c) {
 		return {id: a, name: b, goals: c};
 	});
-var _user$project$Model$Player = F3(
-	function (a, b, c) {
-		return {id: a, firstName: b, lastName: c};
+var _user$project$Model$Player = F2(
+	function (a, b) {
+		return {id: a, lastName: b};
+	});
+var _user$project$Model$MatchEvent = F2(
+	function (a, b) {
+		return {player: a, icon: b};
 	});
 var _user$project$Model$NotPending = {ctor: 'NotPending'};
 var _user$project$Model$Pending = {ctor: 'Pending'};
 
+var _user$project$Decoders$player = A3(
+	_elm_lang$core$Json_Decode$map2,
+	_user$project$Model$Player,
+	A2(_elm_lang$core$Json_Decode$field, 'id', _elm_lang$core$Json_Decode$int),
+	A2(_elm_lang$core$Json_Decode$field, 'lastName', _elm_lang$core$Json_Decode$string));
+var _user$project$Decoders$matchEvent = A3(
+	_elm_lang$core$Json_Decode$map2,
+	_user$project$Model$MatchEvent,
+	A2(_elm_lang$core$Json_Decode$field, 'person', _user$project$Decoders$player),
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'eventType',
+			_1: {
+				ctor: '::',
+				_0: 'icon',
+				_1: {ctor: '[]'}
+			}
+		},
+		_elm_lang$core$Json_Decode$string));
+var _user$project$Decoders$matchEvents = _elm_lang$core$Json_Decode$list(_user$project$Decoders$matchEvent);
 var _user$project$Decoders$team = A4(
 	_elm_lang$core$Json_Decode$map3,
 	_user$project$Model$Team,
@@ -13517,32 +13539,41 @@ var _user$project$Decoders$schedule = A2(
 		'matches',
 		_elm_lang$core$Json_Decode$list(_user$project$Decoders$match)));
 
-var _user$project$Messages$ScheduleMatchSelected = function (a) {
-	return {ctor: 'ScheduleMatchSelected', _0: a};
+var _user$project$Messages$MatchSelected = function (a) {
+	return {ctor: 'MatchSelected', _0: a};
 };
-var _user$project$Messages$ReceiveMatch = function (a) {
-	return {ctor: 'ReceiveMatch', _0: a};
+var _user$project$Messages$ReceiveMatchEvents = function (a) {
+	return {ctor: 'ReceiveMatchEvents', _0: a};
 };
 var _user$project$Messages$ReceiveSchedule = function (a) {
 	return {ctor: 'ReceiveSchedule', _0: a};
 };
 
+var _user$project$Urls$matchEvents = function (id) {
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		'http://rest.tv2.no/sports-dw-rest/sport/event?matchId=',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			_elm_lang$core$Basics$toString(id),
+			'&eventTypeId=19,3,2,1,15'));
+};
 var _user$project$Urls$match = function (id) {
 	return A2(
 		_elm_lang$core$Basics_ops['++'],
 		'https://rest.tv2.no/sports-dw-rest/sport/football/match/',
 		_elm_lang$core$Basics$toString(id));
 };
-var _user$project$Urls$premierLeagueCurrentRound = 'https://rest.tv2.no/sports-dw-rest/sport/schedule/tournament/230/season/338?currentRound=true';
+var _user$project$Urls$premierLeagueCurrentRound = 'http://rest.tv2.no/sports-dw-rest/sport/schedule?fromDate=2017-03-09T00%3A00%3A00%2B01%3A00&toDate=2017-03-10T00%3A00%3A00%2B01%3A00&sportId=1&pageNo=1';
 
-var _user$project$Service$getMatch = function (id) {
+var _user$project$Service$getMatchEvents = function (id) {
 	return A2(
 		_elm_lang$http$Http$send,
-		_user$project$Messages$ReceiveMatch,
+		_user$project$Messages$ReceiveMatchEvents,
 		A2(
 			_elm_lang$http$Http$get,
-			_user$project$Urls$match(id),
-			_user$project$Decoders$match));
+			_user$project$Urls$matchEvents(id),
+			_user$project$Decoders$matchEvents));
 };
 var _user$project$Service$getSchedule = A2(
 	_elm_lang$http$Http$send,
@@ -13565,15 +13596,15 @@ var _user$project$Update$update = F2(
 				} else {
 					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 				}
-			case 'ReceiveMatch':
+			case 'ReceiveMatchEvents':
 				if (_p0._0.ctor === 'Ok') {
 					return {
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Native_Utils.update(
 							model,
 							{
-								match: _elm_lang$core$Maybe$Just(_p0._0._0),
-								matchPending: _user$project$Model$NotPending
+								matchEvents: _elm_lang$core$Maybe$Just(_p0._0._0),
+								matchEventsPending: _user$project$Model$NotPending
 							}),
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
@@ -13581,16 +13612,78 @@ var _user$project$Update$update = F2(
 					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 				}
 			default:
+				var _p1 = _p0._0;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{matchPending: _user$project$Model$Pending}),
-					_1: _user$project$Service$getMatch(_p0._0)
+						{
+							matchEventsPending: _user$project$Model$Pending,
+							matchIdSelected: _elm_lang$core$Maybe$Just(_p1)
+						}),
+					_1: _user$project$Service$getMatchEvents(_p1)
 				};
 		}
 	});
 
+var _user$project$View$matchEventView = function (matchEvent) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('match-event'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$img,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$src(matchEvent.icon),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('match-event-icon'),
+						_1: {ctor: '[]'}
+					}
+				},
+				{ctor: '[]'}),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(matchEvent.player.lastName),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _user$project$View$matchEventsView = F2(
+	function (pendingState, maybeList) {
+		var className = function () {
+			var _p0 = pendingState;
+			if (_p0.ctor === 'Pending') {
+				return 'match-events match-events--loading';
+			} else {
+				return 'match-events';
+			}
+		}();
+		var _p1 = maybeList;
+		if (_p1.ctor === 'Nothing') {
+			return _elm_lang$html$Html$text('');
+		} else {
+			return A2(
+				_elm_lang$html$Html$section,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class(className),
+					_1: {ctor: '[]'}
+				},
+				A2(
+					_elm_lang$core$List$map,
+					function (matchEvent) {
+						return _user$project$View$matchEventView(matchEvent);
+					},
+					_p1._0));
+		}
+	});
 var _user$project$View$teamNameView = function (team) {
 	return A2(
 		_elm_lang$html$Html$span,
@@ -13627,8 +13720,8 @@ var _user$project$View$scoreView = function (match) {
 		});
 };
 var _user$project$View$startTimeView = function (date) {
-	var _p0 = date;
-	if (_p0.ctor === 'Nothing') {
+	var _p2 = date;
+	if (_p2.ctor === 'Nothing') {
 		return _elm_lang$html$Html$text('N/A');
 	} else {
 		return A2(
@@ -13641,43 +13734,75 @@ var _user$project$View$startTimeView = function (date) {
 			{
 				ctor: '::',
 				_0: _elm_lang$html$Html$text(
-					A2(_mgold$elm_date_format$Date_Format$format, '%d.%m %H:%M', _p0._0)),
+					A2(_mgold$elm_date_format$Date_Format$format, '%d.%m %H:%M', _p2._0)),
 				_1: {ctor: '[]'}
 			});
 	}
 };
-var _user$project$View$matchView = function (match) {
-	return A2(
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class('match'),
-			_1: {
-				ctor: '::',
-				_0: _elm_lang$html$Html_Events$onClick(
-					_user$project$Messages$ScheduleMatchSelected(match.id)),
-				_1: {ctor: '[]'}
+var _user$project$View$matchView = F2(
+	function (match, model) {
+		var isActiveMatch = function () {
+			var _p3 = model.matchIdSelected;
+			if (_p3.ctor === 'Just') {
+				return _elm_lang$core$Native_Utils.eq(_p3._0, match.id);
+			} else {
+				return false;
 			}
-		},
-		{
-			ctor: '::',
-			_0: _user$project$View$startTimeView(match.startTime),
-			_1: {
+		}();
+		var events = function () {
+			var _p4 = isActiveMatch;
+			if (_p4 === true) {
+				return A2(_user$project$View$matchEventsView, model.matchEventsPending, model.matchEvents);
+			} else {
+				return _elm_lang$html$Html$text('');
+			}
+		}();
+		return A2(
+			_elm_lang$html$Html$div,
+			{
 				ctor: '::',
-				_0: _user$project$View$teamNameView(match.homeTeam),
+				_0: _elm_lang$html$Html_Attributes$class('match'),
 				_1: {
 					ctor: '::',
-					_0: _user$project$View$scoreView(match),
-					_1: {
-						ctor: '::',
-						_0: _user$project$View$teamNameView(match.awayTeam),
-						_1: {ctor: '[]'}
-					}
+					_0: _elm_lang$html$Html_Events$onClick(
+						_user$project$Messages$MatchSelected(match.id)),
+					_1: {ctor: '[]'}
 				}
-			}
-		});
-};
-var _user$project$View$scheduleView = function (schedule) {
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('match-header'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _user$project$View$startTimeView(match.startTime),
+						_1: {
+							ctor: '::',
+							_0: _user$project$View$teamNameView(match.homeTeam),
+							_1: {
+								ctor: '::',
+								_0: _user$project$View$scoreView(match),
+								_1: {
+									ctor: '::',
+									_0: _user$project$View$teamNameView(match.awayTeam),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}),
+				_1: {
+					ctor: '::',
+					_0: events,
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _user$project$View$scheduleView = function (model) {
 	return A2(
 		_elm_lang$html$Html$section,
 		{
@@ -13688,49 +13813,10 @@ var _user$project$View$scheduleView = function (schedule) {
 		A2(
 			_elm_lang$core$List$map,
 			function (match) {
-				return _user$project$View$matchView(match);
+				return A2(_user$project$View$matchView, match, model);
 			},
-			schedule.matches));
+			model.schedule.matches));
 };
-var _user$project$View$matchDetailsView = F2(
-	function (pendingState, match) {
-		var className = function () {
-			var _p1 = pendingState;
-			if (_p1.ctor === 'Pending') {
-				return 'match-details match-details--loading';
-			} else {
-				return 'match-details';
-			}
-		}();
-		var _p2 = match;
-		if (_p2.ctor === 'Nothing') {
-			return _elm_lang$html$Html$text('');
-		} else {
-			return A2(
-				_elm_lang$html$Html$section,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class(className),
-					_1: {ctor: '[]'}
-				},
-				{
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$h2,
-						{ctor: '[]'},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text('Match details'),
-							_1: {ctor: '[]'}
-						}),
-					_1: {
-						ctor: '::',
-						_0: _user$project$View$matchView(_p2._0),
-						_1: {ctor: '[]'}
-					}
-				});
-		}
-	});
 var _user$project$View$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$main_,
@@ -13751,12 +13837,8 @@ var _user$project$View$view = function (model) {
 				}),
 			_1: {
 				ctor: '::',
-				_0: _user$project$View$scheduleView(model.schedule),
-				_1: {
-					ctor: '::',
-					_0: A2(_user$project$View$matchDetailsView, model.matchPending, model.match),
-					_1: {ctor: '[]'}
-				}
+				_0: _user$project$View$scheduleView(model),
+				_1: {ctor: '[]'}
 			}
 		});
 };
@@ -13766,10 +13848,11 @@ var _user$project$Main$subscriptions = function (schedule) {
 };
 var _user$project$Main$init = {
 	ctor: '_Tuple2',
-	_0: A3(
+	_0: A4(
 		_user$project$Model$Model,
 		_user$project$Model$Schedule(
 			{ctor: '[]'}),
+		_elm_lang$core$Maybe$Nothing,
 		_elm_lang$core$Maybe$Nothing,
 		_user$project$Model$NotPending),
 	_1: _user$project$Service$getSchedule
@@ -13780,7 +13863,7 @@ var _user$project$Main$main = _elm_lang$html$Html$program(
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
 if (typeof _user$project$Main$main !== 'undefined') {
-    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Messages.Msg":{"args":[],"tags":{"ScheduleMatchSelected":["Int"],"ReceiveMatch":["Result.Result Http.Error Model.Match"],"ReceiveSchedule":["Result.Result Http.Error Model.Schedule"]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Date.Date":{"args":[],"tags":{"Date":[]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Model.Team":{"args":[],"type":"{ id : Int, name : String, goals : Int }"},"Model.ScheduleMatch":{"args":[],"type":"{ id : Int , homeTeam : Model.Team , awayTeam : Model.Team , startTime : Maybe.Maybe Date.Date }"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Model.Schedule":{"args":[],"type":"{ matches : List Model.ScheduleMatch }"},"Model.Match":{"args":[],"type":"{ id : Int , homeTeam : Model.Team , awayTeam : Model.Team , startTime : Maybe.Maybe Date.Date }"}},"message":"Messages.Msg"},"versions":{"elm":"0.18.0"}});
+    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Messages.Msg":{"args":[],"tags":{"ReceiveMatchEvents":["Result.Result Http.Error (List Model.MatchEvent)"],"MatchSelected":["Int"],"ReceiveSchedule":["Result.Result Http.Error Model.Schedule"]}},"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Date.Date":{"args":[],"tags":{"Date":[]}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Model.Team":{"args":[],"type":"{ id : Int, name : String, goals : Int }"},"Model.Player":{"args":[],"type":"{ id : Int, lastName : String }"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Model.MatchEvent":{"args":[],"type":"{ player : Model.Player, icon : String }"},"Model.Schedule":{"args":[],"type":"{ matches : List Model.Match }"},"Model.Match":{"args":[],"type":"{ id : Int , homeTeam : Model.Team , awayTeam : Model.Team , startTime : Maybe.Maybe Date.Date }"}},"message":"Messages.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

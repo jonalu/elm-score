@@ -8,15 +8,15 @@ body {
   border: .1rem solid #D7D7D7;
 }
 
-.match {
+.match-header {
   cursor: pointer;
-  padding: .5rem;
   display: flex;
   align-items: center;
+  padding: .5rem;
 }
 
-.match:nth-child(2n+1) {
-  background: #EEEEEE;
+.match:nth-child(2n+1) .match-header {
+  background: #F7F7F7;
 }
 
 .start-time, .team-name {
@@ -36,11 +36,19 @@ body {
   white-space: nowrap;
 }
 
-.match-details .match {
-  opacity: 1;
-  transition: opacity .5s;
+.match-event:nth-child(2n+1) {
+  background: #F7F7F7;
 }
 
-.match-details--loading .match {
-  opacity: 0;
+.match-event {
+  display: flex;
+  padding: .5rem;
+}
+
+.match-event-icon {
+  width: 1rem;
+  margin: 0 .5rem 0 0;
+}
+
+.match-events--loading .match-event {
 }

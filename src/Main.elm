@@ -10,7 +10,7 @@ import Service exposing (getSchedule)
 
 init : ( Model, Cmd Msg )
 init =
-    ( Model (Schedule []) Nothing Model.NotPending
+    ( Model (Schedule []) Nothing Nothing Model.NotPending
     , getSchedule
     )
 

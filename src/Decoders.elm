@@ -1,7 +1,7 @@
 module Decoders exposing (..)
 
 import Json.Decode exposing (..)
-import Model exposing (Schedule, ScheduleMatch, Match, Team)
+import Model exposing (Schedule, Match, Team, MatchEvent, Player)
 import Date exposing (Date, fromString)
 
 
@@ -40,3 +40,22 @@ schedule : Decoder Schedule
 schedule =
     map Schedule
         (field "matches" (list match))
+
+
+player : Decoder Player
+player =
+    map2 Player
+        (field "id" int)
+        (field "lastName" string)
+
+
+matchEvent : Decoder MatchEvent
+matchEvent =
+    map2 MatchEvent
+        (field "person" player)
+        (at [ "eventType", "icon" ] string)
+
+
+matchEvents : Decoder (List MatchEvent)
+matchEvents =
+    list matchEvent
