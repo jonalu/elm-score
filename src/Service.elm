@@ -1,14 +1,20 @@
-module Service exposing (getSchedule, getMatchEvents)
+module Service exposing (getTournaments, getSchedule, getMatchEvents)
 
 import Http
-import Decoders exposing (schedule, matchEvents)
-import Messages exposing (Msg(ReceiveSchedule, ReceiveMatchEvents))
+import Decoders exposing (tournaments, schedule, matchEvents)
+import Messages exposing (Msg(ReceiveTournaments, ReceiveSchedule, ReceiveMatchEvents))
 import Urls
 
 
-getSchedule : Cmd Msg
-getSchedule =
-    Http.get Urls.premierLeagueCurrentRound schedule
+getTournaments : Cmd Msg
+getTournaments =
+    Http.get Urls.tournaments tournaments
+        |> Http.send ReceiveTournaments
+
+
+getSchedule : Int -> Cmd Msg
+getSchedule id =
+    Http.get (Urls.schedule id) schedule
         |> Http.send ReceiveSchedule
 
 

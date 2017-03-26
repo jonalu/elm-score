@@ -1,17 +1,17 @@
 module Main exposing (..)
 
 import Html exposing (program)
-import Model exposing (Model, Schedule)
+import Model exposing (Model)
 import Update exposing (update)
 import View exposing (view)
 import Messages exposing (Msg(..))
-import Service exposing (getSchedule)
+import Service exposing (getTournaments)
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( Model (Schedule []) Nothing Nothing Model.NotPending
-    , getSchedule
+    ( Model.init
+    , getTournaments
     )
 
 
