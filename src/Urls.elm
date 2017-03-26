@@ -1,15 +1,14 @@
 module Urls exposing (..)
 
 
-premierLeagueCurrentRound : String
-premierLeagueCurrentRound =
-    "https://rest.tv2.no/sports-dw-rest/sport/schedule/tournament/230/season/338?currentRound=true"
+schedule : Int -> String
+schedule id =
+    "https://rest.tv2.no/sports-dw-rest/sport/schedule/tournament/" ++ toString id ++ "/season/338?currentRound=true"
 
 
-
--- premierLeagueCurrentRound : String
--- premierLeagueCurrentRound =
---     "https://rest.tv2.no/sports-dw-rest/sport/schedule?fromDate=2017-03-09T00%3A00%3A00%2B01%3A00&toDate=2017-03-10T00%3A00%3A00%2B01%3A00&sportId=1&pageNo=1"
+tournaments : String
+tournaments =
+    "https://rest.tv2.no/sports-dw-rest/sport/football/tournament/all"
 
 
 match : Int -> String
