@@ -9,10 +9,23 @@ type PendingState
 
 
 type alias Model =
-    { schedule : Schedule
+    { tournaments : List Tournament
+    , schedule : Schedule
+    , tournamentIdSelected : Maybe Int
     , matchIdSelected : Maybe Int
     , matchEvents : Maybe (List MatchEvent)
     , matchEventsPending : PendingState
+    }
+
+
+init : Model
+init =
+    Model [] (Schedule []) Nothing Nothing Nothing NotPending
+
+
+type alias Tournament =
+    { id : Int
+    , name : String
     }
 
 

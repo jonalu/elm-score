@@ -1,8 +1,20 @@
 module Decoders exposing (..)
 
 import Json.Decode exposing (..)
-import Model exposing (Schedule, Match, Team, MatchEvent, Player)
+import Model exposing (Tournament, Schedule, Match, Team, MatchEvent, Player)
 import Date exposing (Date, fromString)
+
+
+tournament : Decoder Tournament
+tournament =
+    map2 Tournament
+        (field "id" int)
+        (field "name" string)
+
+
+tournaments : Decoder (List Tournament)
+tournaments =
+    list tournament
 
 
 date : Decoder (Maybe Date)

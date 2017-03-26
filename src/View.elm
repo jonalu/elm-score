@@ -44,6 +44,14 @@ matchView match model =
                 _ ->
                     False
 
+        className =
+            case isActiveMatch of
+                True ->
+                    "match match--selected"
+
+                False ->
+                    "match"
+
         events =
             case isActiveMatch of
                 True ->
@@ -52,7 +60,7 @@ matchView match model =
                 False ->
                     text ""
     in
-        div [ class "match", onClick (MatchSelected match.id) ]
+        div [ class className, onClick (MatchSelected match.id) ]
             [ div [ class "match-header" ]
                 [ startTimeView match.startTime
                 , teamNameView match.homeTeam
@@ -96,9 +104,41 @@ matchEventView matchEvent =
     div [ class "match-event" ] [ img [ src matchEvent.icon, class "match-event-icon" ] [], text matchEvent.player.lastName ]
 
 
+tournamentView : Model -> Tournament -> Html Msg
+tournamentView model tournament =
+    let
+        tournamentSelected =
+            case model.tournamentIdSelected of
+                Just id ->
+                    id == tournament.id
+
+                _ ->
+                    False
+
+        className =
+            case tournamentSelected of
+                True ->
+                    "tournament tournament--selected"
+
+                False ->
+                    "tournament"
+    in
+        div [ class className, onClick (TournamentSelected tournament.id) ] [ text tournament.name ]
+
+
+tournamentsView : Model -> Html Msg
+tournamentsView model =
+    model.tournaments
+        |> List.map (\tournament -> tournamentView model tournament)
+        |> section [ class "tournaments" ]
+
+
 view : Model -> Html Msg
 view model =
     main_ [ class "elm-score-page" ]
         [ h1 [] [ text "Elm-score" ]
-        , scheduleView model
+        , div [ class "flex-box" ]
+            [ tournamentsView model
+            , scheduleView model
+            ]
         ]
