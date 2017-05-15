@@ -2,24 +2,36 @@ body {
   font-family: 'Slabo 27px', serif;
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
-  background: url(http://s1.picswalls.com/wallpapers/2014/07/25/football-wallpaper_041201595_96.jpg);
+}
+
+h1 {
+  text-align: center;
 }
 
 .flex-box {
   display: flex;
+  justify-content: space-around;
 }
 
 .tournaments {
   flex: 1;
-  max-height: 55rem;
   max-width: 20rem;
   overflow: auto;
 }
 
+.tournament:nth-child(2n+1) {
+  background: #969696;
+  color: #fff;
+}
+
+.match:nth-child(2n+1) .match-header {
+  background: #eee;
+}
+
 .match-schedule {
   flex: 2;
-  max-height: 55rem;
   overflow: auto;
+  margin-left: .5rem;
 }
 
 .tournament, .match-header {
@@ -59,11 +71,11 @@ body {
   padding: .5rem;
 }
 
-.match-event-icon {
-  width: 1rem;
-  max-height: 1rem;
-  margin: 0 .5rem 0 0;
+.match-event:nth-child(2n+0) {
+  background: #f7f7f7;
 }
 
-.match-events--loading .match-event {
+.match-event-icon {
+  width: 1rem;
+  margin: 0 .5rem 0 0;
 }
